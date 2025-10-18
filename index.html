@@ -1,59 +1,131 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2c3e50">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ficha de Treino – Cervical + Escoliose + Cifose</title>
+<title>Ficha de Treino com Cronômetros</title>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f9;
-        margin: 20px;
-    }
-    h1, h2 {
-        color: #2c3e50;
-    }
-    .treino {
-        background-color: #fff;
-        padding: 15px;
-        margin-bottom: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    .exercicio {
-        display: flex;
-        align-items: flex-start;
-        margin-bottom: 15px;
-    }
-    .exercicio img {
-        width: 150px;
-        height: auto;
-        margin-right: 15px;
-        border-radius: 6px;
-    }
-    .detalhes {
-        flex: 1;
-    }
-    label {
-        display: flex;
-        align-items: center;
-        margin-top: 5px;
-        cursor: pointer;
-    }
-    input[type="checkbox"] {
-        margin-right: 10px;
-        transform: scale(1.2);
-    }
-    a {
-        color: #2980b9;
-        text-decoration: none;
-    } 
-    a:hover {
-        text-decoration: underline;
-    }
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin-top: 60px;
+}
+
+h1, h2 { color: #2c3e50; }
+
+.treino {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Card do exercício */
+/* Card do exercício */
+.exercicio {
+    display: flex;
+    flex-direction: column; /* Mantém imagem em cima e detalhes abaixo */
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    padding: 15px;
+    margin: 10px 0;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.exercicio:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.25);
+}
+
+.exercicio-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap; /* Mantém responsivo */
+}
+
+.exercicio img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.detalhes {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+
+label {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+}
+
+input[type="number"] {
+    width: 60px;
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+button {
+    margin-top: 5px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #3498db;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+.cronometro {
+    font-weight: bold;
+    color: #e74c3c;
+    margin-top: 5px;
+}
+
+/* Cronômetro fixo no topo */
+#cronometro-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #2c3e50;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
 </style>
 </head>
 <body>
+<!-- Cronômetro fixo -->
+<div id="cronometro-container">
+    Descanso entre exercícios: <span id="cronometro-exercicio">01:00</span>
+    <button id="start-exercicio">Iniciar</button>
+    <button id="reset-exercicio">Reset</button>
+</div>
 
 <h1>Ficha de Treino Personalizada</h1>
 <p><strong>Objetivo:</strong> Fortalecimento postural com foco em escápulas, cadeia posterior, estabilização cervical e core.</p>
@@ -62,112 +134,267 @@
 <h2>Treino A – Costas, Escápulas e Core</h2>
 <div class="treino">
 
-    <div class="exercicio">
-        <img src="https://www.hipertrofia.org/blog/wp-content/uploads/2024/05/cable-straight-back-seated-row.gif" alt="Remada Baixa com Triângulo">
+<!-- Exercício 1 -->
+<div class="exercicio" data-exercicio="Remada Baixa com Triângulo" data-descanso="60">
+    <div class="exercicio-header">
+        <img src="gifs/remada-baixa.gif" alt="Remada Baixa">
         <div class="detalhes">
             <strong>Remada Baixa com Triângulo ou Elástico</strong> – 3x8 reps, descanso 60s.<br>
-            Foco: escápulas para trás e para baixo.<br>           
-            <label><input type="checkbox"> Realizado</label>
+            Peso: <input type="number" class="peso" placeholder="kg">
+            Reps: <input type="number" class="reps" placeholder="reps"><br>
+            <button class="salvar">Salvar</button>
+            <label><input type="checkbox" class="feito"> Realizado</label><br>
+            Descanso entre reps: <span class="cronometro">00:00</span>
+            <button class="start-rep">Iniciar</button>
         </div>
     </div>
+</div>
 
-    <div class="exercicio">
-        <img src="https://www.hipertrofia.org/blog/wp-content/uploads/2024/05/Face-Pull.gif" alt="Face Pull">
+<!-- Exercício 2 -->
+<div class="exercicio" data-exercicio="Face Pull" data-descanso="60">
+    <div class="exercicio-header">
+        <img src="gifs/Face-Pull.gif" alt="Face Pull">
         <div class="detalhes">
             <strong>Face Pull na Polia (com corda)</strong> – 3x8 reps, descanso 60s.<br>
-            Cotovelos na linha dos ombros, abrir as mãos no final.<br>
-            <label><input type="checkbox"> Realizado</label>
+            Peso: <input type="number" class="peso" placeholder="kg">
+            Reps: <input type="number" class="reps" placeholder="reps"><br>
+            <button class="salvar">Salvar</button>
+            <label><input type="checkbox" class="feito"> Realizado</label><br>
+            Descanso entre reps: <span class="cronometro">00:00</span>
+            <button class="start-rep">Iniciar</button>
         </div>
     </div>
+</div>
 
-    <div class="exercicio">
-        <img src="https://www.hipertrofia.org/blog/wp-content/uploads/2023/11/remada-serrote-2.gif" alt="Remada Unilateral">
+<!-- Exercício 3 -->
+<div class="exercicio" data-exercicio="Remada Unilateral" data-descanso="45">
+    <div class="exercicio-header">
+        <img src="gifs/remada-serrote.gif" alt="Remada Unilateral">
         <div class="detalhes">
             <strong>Remada Unilateral com Apoio no Banco</strong> – 3x8 reps cada lado, descanso 45s.<br>
-            Coluna neutra, sem girar tronco.<br>            
-            <label><input type="checkbox"> Realizado</label>
+            Peso: <input type="number" class="peso" placeholder="kg">
+            Reps: <input type="number" class="reps" placeholder="reps"><br>
+            <button class="salvar">Salvar</button>
+            <label><input type="checkbox" class="feito"> Realizado</label><br>
+            Descanso entre reps: <span class="cronometro">00:00</span>
+            <button class="start-rep">Iniciar</button>
         </div>
     </div>
+</div>
 
-    <div class="exercicio">
-        <img src="https://image.tuasaude.com/media/article/xc/dx/3-exercicios-simples-para-fazer-em-casa-e-perder-barriga_73913.gif?width=686&height=487" alt="Prancha Isométrica">
+<!-- Exercício 4 -->
+<div class="exercicio" data-exercicio="Prancha Isométrica" data-descanso="45">
+    <div class="exercicio-header">
+        <img src="gifs/prancha.webp" alt="Prancha Isométrica">
         <div class="detalhes">
             <strong>Prancha Isométrica (cotovelos)</strong> – 3x30s, descanso 45s.<br>
-            Pescoço alinhado.<br>
-            <label><input type="checkbox"> Realizado</label>
+            Peso: <input type="number" class="peso" placeholder="kg">
+            Reps: <input type="number" class="reps" placeholder="reps"><br>
+            <button class="salvar">Salvar</button>
+            <label><input type="checkbox" class="feito"> Realizado</label><br>
+            Descanso entre reps: <span class="cronometro">00:00</span>
+            <button class="start-rep">Iniciar</button>
         </div>
     </div>
+</div>
 
-    <div class="exercicio">
-        <img src="https://www.hipertrofia.org/blog/wp-content/uploads/2023/12/glute-bridge.gif" alt="Ponte de Glúteo">
+<!-- Exercício 5 -->
+<div class="exercicio" data-exercicio="Ponte de Glúteo" data-descanso="45">
+    <div class="exercicio-header">
+        <img src="gifs/glute-bridge.gif" alt="Ponte de Glúteo">
         <div class="detalhes">
             <strong>Ponte de Glúteo</strong> – 3x10 reps, descanso 45s.<br>
-            Subida controlada ativando core.<br>
-            <label><input type="checkbox"> Realizado</label>
+            Peso: <input type="number" class="peso" placeholder="kg">
+            Reps: <input type="number" class="reps" placeholder="reps"><br>
+            <button class="salvar">Salvar</button>
+            <label><input type="checkbox" class="feito"> Realizado</label><br>
+            Descanso entre reps: <span class="cronometro">00:00</span>
+            <button class="start-rep">Iniciar</button>
         </div>
     </div>
+</div>
 
-    <div class="exercicio">
-        <img src="https://www.hipertrofia.org/blog/wp-content/uploads/2025/01/alongamento-peitoral-parede.gif" alt="Alongamento de Peitoral">
+<!-- Exercício 6 -->
+<div class="exercicio" data-exercicio="Alongamento de Peitoral" data-descanso="30">
+    <div class="exercicio-header">
+        <img src="gifs/alongamento-peitoral-parede.gif" alt="Alongamento de Peitoral">
         <div class="detalhes">
             <strong>Alongamento de Peitoral na Parede</strong> – 2x30s cada lado.<br>
-            <label><input type="checkbox"> Realizado</label>
+            Peso: <input type="number" class="peso" placeholder="kg">
+            Reps: <input type="number" class="reps" placeholder="reps"><br>
+            <button class="salvar">Salvar</button>
+            <label><input type="checkbox" class="feito"> Realizado</label><br>
+            Descanso entre reps: <span class="cronometro">00:00</span>
+            <button class="start-rep">Iniciar</button>
         </div>
     </div>
+</div>
 
 </div>
 
 <h2>Treino B – Cadeia Posterior e Mobilidade</h2>
 <div class="treino">
 
-    <div class="exercicio">
-        <img src="https://grandeatleta.com.br/wp-content/uploads/2023/10/Crucifixo-inverso-na-maquina-como-fazer-musculos.gif" alt="Crucifixo Invertido">
+<!-- Exercício 7 -->
+<div class="exercicio" data-exercicio="Crucifixo Invertido" data-descanso="60">
+    <div class="exercicio-header">
+        <img src="gifs/Crucifixo-inverso-na-maquina.gif" alt="Crucifixo Invertido">
         <div class="detalhes">
             <strong>Crucifixo Invertido (Peito Apoiado)</strong> – 3x8 reps, descanso 60s.<br>
-            Abrir escápulas sem tensionar pescoço.<br>
-            <label><input type="checkbox"> Realizado</label>
+            Peso: <input type="number" class="peso" placeholder="kg">
+            Reps: <input type="number" class="reps" placeholder="reps"><br>
+            <button class="salvar">Salvar</button>
+            <label><input type="checkbox" class="feito"> Realizado</label><br>
+            Descanso entre reps: <span class="cronometro">00:00</span>
+            <button class="start-rep">Iniciar</button>
         </div>
     </div>
+</div>
 
-    <div class="exercicio">
-        <img src="https://grandeatleta.com.br/blog/wp-content/uploads/2024/08/Puxada-neutra-com-triangulo.gif" alt="Puxada Frontal">
+<!-- Exercício 8 -->
+<div class="exercicio" data-exercicio="Puxada Frontal" data-descanso="60">
+    <div class="exercicio-header">
+        <img src="gifs/Puxada-neutra-com-triangulo.gif" alt="Puxada Frontal">
         <div class="detalhes">
             <strong>Puxada Frontal com Pegada Neutra</strong> – 3x8 reps, descanso 60s.<br>
-            Peito aberto, pescoço neutro.<br>
-            <label><input type="checkbox"> Realizado</label>
+            Peso: <input type="number" class="peso" placeholder="kg">
+            Reps: <input type="number" class="reps" placeholder="reps"><br>
+            <button class="salvar">Salvar</button>
+            <label><input type="checkbox" class="feito"> Realizado</label><br>
+            Descanso entre reps: <span class="cronometro">00:00</span>
+            <button class="start-rep">Iniciar</button>
         </div>
     </div>
+</div>
 
-    <div class="exercicio">
-        <img src="https://fitnessprogramer.com/wp-content/uploads/2021/05/Dead-Bug.gif" alt="Dead Bug">
+<!-- Exercício 9 -->
+<div class="exercicio" data-exercicio="Dead Bug" data-descanso="45">
+    <div class="exercicio-header">
+        <img src="gifs/Dead-Bug.gif" alt="Dead Bug">
         <div class="detalhes">
             <strong>Dead Bug no Colchonete ou Bola</strong> – 3x8 reps cada lado, descanso 45s.<br>
-            Movimento lento com controle.<br>
-            <label><input type="checkbox"> Realizado</label>
+            Peso: <input type="number" class="peso" placeholder="kg">
+            Reps: <input type="number" class="reps" placeholder="reps"><br>
+            <button class="salvar">Salvar</button>
+            <label><input type="checkbox" class="feito"> Realizado</label><br>
+            Descanso entre reps: <span class="cronometro">00:00</span>
+            <button class="start-rep">Iniciar</button>
         </div>
     </div>
+</div>
 
-    <div class="exercicio">
-        <img src="https://files.passeidireto.com/1b9c491a-ab4f-4ada-88b0-4f8d1911468e/bg1.png" alt="Mobilidade Torácica">
+<!-- Exercício 10 -->
+<div class="exercicio" data-exercicio="Mobilidade Torácica" data-descanso="30">
+    <div class="exercicio-header">
+        <img src="gifs/bg1.png" alt="Mobilidade Torácica">
         <div class="detalhes">
             <strong>Mobilidade Torácica com Bastão</strong> – 3x6 rotações controladas.<br>
-            Abrir peito levemente.<br>
-            <label><input type="checkbox"> Realizado</label>
+            Peso: <input type="number" class="peso" placeholder="kg">
+            Reps: <input type="number" class="reps" placeholder="reps"><br>
+            <button class="salvar">Salvar</button>
+            <label><input type="checkbox" class="feito"> Realizado</label><br>
+            Descanso entre reps: <span class="cronometro">00:00</span>
+            <button class="start-rep">Iniciar</button>
         </div>
     </div>
+</div>
 
-    <div class="exercicio">
-        <img src="https://pocketyoga.com/assets/images/full/Child.png" alt="Alongamento Global">
-          <img src="https://static.vecteezy.com/ti/vetor-gratis/p1/8635623-mulher-fazendo-ajoelhado-flexor-do-quadril-estiramento-exercicio-plano-ilustracao-isolado-em-fundo-branco-vetor.jpg" alt="Alongamento quadril">
-        
+<!-- Exercício 11 -->
+<div class="exercicio" data-exercicio="Alongamento Global" data-descanso="30">
+    <div class="exercicio-header">
+        <img src="gifs/Child.png" alt="Alongamento Global">
         <div class="detalhes">
-            <strong>Alongamento Global + Liberação de Trapézio e Peitoral - alongamento de cadeia posterior (curvada para frente e perna retas (em pé));child's pose extension, alongamento de flexores de quadril</strong> – 2x30s cada região.<br>
-            <a href="https://giphy.com/gifs/3o6ZsZ7pW5iVJ6V3k4" target="_blank">Ver GIF</a>
-            <label><input type="checkbox"> Realizado</label>
+            <strong>Alongamento Global + Liberação de Trapézio e Peitoral</strong> – 2x30s cada região.<br>
+            Peso: <input type="number" class="peso" placeholder="kg">
+            Reps: <input type="number" class="reps" placeholder="reps"><br>
+            <button class="salvar">Salvar</button>
+            <label><input type="checkbox" class="feito"> Realizado</label><br>
+            Descanso entre reps: <span class="cronometro">00:00</span>
+            <button class="start-rep">Iniciar</button>
         </div>
     </div>
+</div>
 
 </div>
+
+<script>
+// --- LocalStorage ---
+document.querySelectorAll('.exercicio').forEach(ex => {
+    const nome = ex.dataset.exercicio;
+    const salvo = JSON.parse(localStorage.getItem(nome));
+    if (salvo) {
+        if(ex.querySelector('.peso')) ex.querySelector('.peso').value = salvo.peso;
+        if(ex.querySelector('.reps')) ex.querySelector('.reps').value = salvo.reps;
+        ex.querySelector('.feito').checked = salvo.feito;
+    }
+    ex.querySelector('.salvar').addEventListener('click', () => {
+        const peso = ex.querySelector('.peso') ? ex.querySelector('.peso').value : '';
+        const reps = ex.querySelector('.reps') ? ex.querySelector('.reps').value : '';
+        const feito = ex.querySelector('.feito').checked;
+        localStorage.setItem(nome, JSON.stringify({ peso, reps, feito }));
+        alert('Salvo!');
+    });
+});
+
+// --- Cronômetro por exercício ---
+document.querySelectorAll('.exercicio').forEach(ex => {
+    const button = ex.querySelector('.start-rep');
+    const display = ex.querySelector('.cronometro');
+    let interval;
+    button.addEventListener('click', () => {
+        clearInterval(interval);
+        let tempo = parseInt(ex.dataset.descanso);
+        display.textContent = formatTempo(tempo);
+        interval = setInterval(() => {
+            if (tempo > 0) {
+                tempo--;
+                display.textContent = formatTempo(tempo);
+            } else {
+                clearInterval(interval);
+                alert(`Descanso do exercício "${ex.dataset.exercicio}" terminado!`);
+            }
+        }, 1000);
+    });
+});
+
+function formatTempo(segundos) {
+    const min = String(Math.floor(segundos / 60)).padStart(2, '0');
+    const seg = String(segundos % 60).padStart(2, '0');
+    return `${min}:${seg}`;
+}
+
+// --- Cronômetro entre exercícios ---
+let tempoEx = 60;
+let intervalEx;
+function atualizarEx() {
+    document.getElementById('cronometro-exercicio').textContent = formatTempo(tempoEx);
+}
+document.getElementById('start-exercicio').addEventListener('click', () => {
+    clearInterval(intervalEx);
+    tempoEx = 60;
+    intervalEx = setInterval(() => {
+        if (tempoEx > 0) {
+            tempoEx--;
+            atualizarEx();
+        } else {
+            clearInterval(intervalEx);
+            alert('Descanso entre exercícios terminado!');
+        }
+    }, 1000);
+});
+document.getElementById('reset-exercicio').addEventListener('click', () => {
+    clearInterval(intervalEx);
+    tempoEx = 60;
+    atualizarEx();
+});
+atualizarEx();
+
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js")
+    .then(() => console.log("Service Worker registrado!"))
+    .catch(err => console.log("Erro ao registrar SW:", err));
+}
+</script>
 
 </body>
 </html>
